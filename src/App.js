@@ -124,17 +124,51 @@ import Header from "./Header";
 // useCallback
 // It caches  function definition between re-render,it means it doesn't create multiple instance of same function when re-renders happens,
 // Instead of creating new instance of the function it provides the cached function on re-render of the component
-const App = () => {
-  const [count,setCount] = useState(0);
-  const newFn = useCallback(() => {},[]);
-  // const newFn = useCallback(() => {},[count]);
+// const App = () => {
+//   const [count,setCount] = useState(0);
+//   const newFn = useCallback(() => {},[]);
+//   // const newFn = useCallback(() => {},[count]);
 
+//   return(
+//     <div>
+//       <Header newFn={newFn}/>
+//       <h1>{count}</h1>
+//       <button onClick={()=>setCount(prev=>prev+1)}>Click Here</button>
+//     </div>
+//   )
+// }
+
+const App = () => {
+  const [data,setData] = useState([]);
+  console.log(data);
+  
+  useEffect(() => {
+    fetch("https://reqres.in/api/users?page=2")
+    .then((res) => res.json())
+    .then((data) => setData(data.data))
+  },[])
   return(
-    <div>
-      <Header newFn={newFn}/>
-      <h1>{count}</h1>
-      <button onClick={()=>setCount(prev=>prev+1)}>Click Here</button>
-    </div>
+    <>
+     <table style={{ border: "1px solid black", borderCollapse: "collapse" }}>
+  <thead>
+    <tr>
+      <th style={{ border: "1px solid black", padding: "8px" }}>Email</th>
+      <th style={{ border: "1px solid black", padding: "8px" }}>First Name</th>
+      <th style={{ border: "1px solid black", padding: "8px" }}>Last Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map((user) => (
+      <tr key={user.id}>
+        <td style={{ border: "1px solid black", padding: "8px" }}>{user.email}</td>
+        <td style={{ border: "1px solid black", padding: "8px" }}>{user.first_name}</td>
+        <td style={{ border: "1px solid black", padding: "8px" }}>{user.last_name}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+    </>
   )
 }
 
